@@ -8,7 +8,7 @@ var roles = _readTable('roles-table');
 
 /**
  * First, let's create a few global utility functions
- * that will help us out. We will later use this merge function for 
+ * that will help us out. We will later use this merge function for
  * left joining tables
  */
 describe('Utility functions', function () {
@@ -29,13 +29,13 @@ describe('Utility functions', function () {
  * We've already populated three large JS arrays that will
  * act as our "tables".  If you log the `movies`, `actors`, or `roles` variables,
  * you'll see the arrays we'll be working with.
- * 
+ *
  */
 describe('Functional Query Language', function () {
 
   /**
    * Read in the movies JS Array
-   *  and store the data somewhere inside the new FQL object.  
+   *  and store the data somewhere inside the new FQL object.
    */
   var moviesTable;
 
@@ -55,14 +55,14 @@ describe('Functional Query Language', function () {
   it('should have a count method', function () {
     // count() returns how many records are in the movies array
     // again, checkout out the `movies` var to see the data set
-    // 
+    //
     // There are 36 movies in the movies Array
     expect(moviesTable.count()).toEqual(36);
   });
 
   /**
-   * Should have a limit(X) method that will 
-   *  cut out the first X rows.  count() should 
+   * Should have a limit(X) method that will
+   *  cut out the first X rows.  count() should
    *  then show only those rows.
    */
   it('should have a limit() method', function () {
@@ -86,18 +86,18 @@ describe('Functional Query Language', function () {
     expect(all_movies).toEqual(movies);
   });
 
-  /** 
+  /**
    * Should have a where(criteria) method that
    * will select rows of the table where the function
    * returns true - similar to Array#filter
    *
-   * this would be similar to 
+   * this would be similar to
    * SELECT * FROM movies WHERE name = "Shrek"
    */
   it('should support where queries', function() {
     var results = moviesTable.where({name: "Shrek"}).exec();
     // results should look like this:
-    // [{"id":300229,"name":"Shrek","year":2001,"rank":8.1}] 
+    // [{"id":300229,"name":"Shrek","year":2001,"rank":8.1}]
     expect(results[0].year).toEqual(2001);
     expect(results[0].id).toEqual(300229);
   });
@@ -116,7 +116,7 @@ describe('Functional Query Language', function () {
     expect(results.length).toEqual(10);
   });
 
-  /** 
+  /**
    * where queries can return more than 1 row
    *
    * SELECT * FROM movies where year = 2001;
@@ -124,7 +124,7 @@ describe('Functional Query Language', function () {
   it('should support where queries that return multiple rows', function () {
     var results = moviesTable.where({year: 2001}).exec();
     var expectedResults = [{"id":238072,"name":"Ocean's Eleven","year":2001,"rank":7.5},{"id":300229,"name":"Shrek","year":2001,"rank":8.1},{"id":350424,"name":"Vanilla Sky","year":2001,"rank":6.9}];
-    expect(results).toEqual(expectedResults);    
+    expect(results).toEqual(expectedResults);
   });
 
 
@@ -140,12 +140,12 @@ describe('Functional Query Language', function () {
                       rank: function (v) {return v > 8;}
                     })
                     .exec();
-    var expectedResults = [{"id":300229,"name":"Shrek","year":2001,"rank":8.1}];    
-    // expect(results).toEqual(expectedResults);    
+    var expectedResults = [{"id":300229,"name":"Shrek","year":2001,"rank":8.1}];
+    // expect(results).toEqual(expectedResults);
     expect(results).toEqual(expectedResults);
   });
-  
-  /** 
+
+  /**
    * FQL.select(keysArray) can limit which values come back in the query
    * SELECT id, name FROM movies WHERE rank > 8;
    */
@@ -159,9 +159,9 @@ describe('Functional Query Language', function () {
     expect(results).toEqual(expectedResults);
   });
 
-  /** 
-   * FQL.order() should simply take a column and re-order 
-   * the data in ascending order based on each row's value 
+  /**
+   * FQL.order() should simply take a column and re-order
+   * the data in ascending order based on each row's value
    * for that column.
    *
    * Refer to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
@@ -177,7 +177,7 @@ describe('Functional Query Language', function () {
     expect(results).toEqual(expectedResults);
   });
 
-  xit('ordering should not change the order for subsequent queries', function () {
+  it('ordering should not change the order for subsequent queries', function () {
     var resultsA = moviesTable
                     .where({year: 1999})
                     .order('rank')
@@ -194,7 +194,7 @@ describe('Functional Query Language', function () {
 });
 
 /**
-  These are a bit more difficult.                                                                      
+  These are a bit more difficult.
  */
 
 describe('Functional Query Language - Level 2', function () {
@@ -205,7 +205,7 @@ describe('Functional Query Language - Level 2', function () {
     moviesTable = new FQL(movies);
   });
 
-  /** 
+  /**
    * Similar to LEFT OUTER JOIN in SQL, this combines on FQL data set with another
    * Let's see if we can see how many roles were in the movie Hollow Man
    *
@@ -213,10 +213,10 @@ describe('Functional Query Language - Level 2', function () {
    * a function that returns true if you want to combine the right data set with the left
    * data set
    *
-   * It's an outer join because every row in the left data set can be combined with multiple 
+   * It's an outer join because every row in the left data set can be combined with multiple
    * rows in the right data set (the joined data set)
    */
-  xit('should support left outer joining the results with a limit', function () {
+  it('should support left outer joining the results with a limit', function () {
     var rolesTable = new FQL(roles);
 
     var results = moviesTable
@@ -237,7 +237,7 @@ describe('Functional Query Language - Level 2', function () {
     expect(results).toEqual(expectedResults);
   });
 
-  xit('should support left outer joining the results with a count', function () {
+  it('should support left outer joining the results with a count', function () {
     var rolesTable = new FQL(roles);
 
     var results = moviesTable
@@ -256,7 +256,7 @@ describe('Functional Query Language - Level 2', function () {
   /**
    * A double left join!  Let's get the actors in the movie
    */
-  xit('should support double left outer joining the results', function () {
+  it('should support double left outer joining the results', function () {
     var rolesTable = new FQL(roles);
     var actorsTable = new FQL(actors);
 
@@ -295,21 +295,21 @@ describe('Functional Query Language - Indexing', function () {
 
   /**
    * Let's add an indexing function to the movies table.
-   * 
-   * Think of an index table as a kind of reverse look up table: 
-   * the keys are entry values (e.g. 'Shrek'), and the values are 
+   *
+   * Think of an index table as a kind of reverse look up table:
+   * the keys are entry values (e.g. 'Shrek'), and the values are
    * the indices of those entry values (e.g. 4).
    *
-   * When a row gets indexed (but not before), you should construct 
-   * and store an index table for that row name. You will need to 
+   * When a row gets indexed (but not before), you should construct
+   * and store an index table for that row name. You will need to
    * loop through all the entries for that row.
    *
-   * Remember, though, that entry values are not necessarily 
-   * unique. For example, the gender row in the actors table--there 
-   * are many indices with gender 'M'. So make sure to store the 
+   * Remember, though, that entry values are not necessarily
+   * unique. For example, the gender row in the actors table--there
+   * are many indices with gender 'M'. So make sure to store the
    * indices as an array of numbers.
    */
-  xit('should support a function to add an index to the FQL class', function() {
+  it('should support a function to add an index to the FQL class', function() {
     // it should not be possible to look up the index of an entry
     // in a row prior to `addIndex` on that row
     expect( moviesTable.getIndicesOf('name', 'Apollo 13') ).toEqual( undefined );
@@ -325,23 +325,23 @@ describe('Functional Query Language - Indexing', function () {
    *
    * You can verify this with something like: actors.forEach(function(el, i) { if(el.last_name == 'Allison') { console.log(i) } })
    */
-  xit('should support indexing a value that exists in multiple rows', function() {
-    
+  it('should support indexing a value that exists in multiple rows', function() {
+
     actorsTable.addIndex('last_name');
     expect( actorsTable.getIndicesOf('last_name', 'Allison') ).toEqual( [14, 15, 16] );
   });
 
 
   /**
-   * Indices are only useful because they allow you to retrieve data 
+   * Indices are only useful because they allow you to retrieve data
    * faster than naive searching.
    *
    * Once a field is indexed, where queries on that field should make
-   * use of that index. Instead of naively searching through all data, 
-   * the where should simply reach into the indices and pluck those 
+   * use of that index. Instead of naively searching through all data,
+   * the where should simply reach into the indices and pluck those
    * out of the data.
    */
-  xit('should use available indices during where queries', function() {
+  it('should use available indices during where queries', function() {
     actorsTable.addIndex('last_name');
 
     spyOn(actorsTable, 'getIndicesOf').and.callThrough();
@@ -350,7 +350,7 @@ describe('Functional Query Language - Indexing', function () {
     expect( actorsTable.getIndicesOf ).toHaveBeenCalledWith( 'last_name', 'Russell' );
   });
 
-  xit('should produce the same query results with significantly faster look up times', function() {
+  it('should produce the same query results with significantly faster look up times', function() {
     console.log('');
     console.time('Without index');
     for (var timesToRun = 1000; timesToRun--;) {
@@ -370,6 +370,3 @@ describe('Functional Query Language - Indexing', function () {
   });
 
 });
-
-
-
