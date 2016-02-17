@@ -124,28 +124,29 @@ function FQL(table) {
 
   this.addIndex = function(column) {
     var table = this.exec();
-    var indexedTable = [];
+		var val;
+		if (!indicies[column]) {
+			indicies[column] = {};
+		};
+		var curIdx = indicies[column];
     for (var i = 0; i < table.length; i++) {
-      indexedTable.push({
-        id: i,
-        [column]: table[i][column]
-      });
-    }
-    indicies[column] = new FQL(indexedTable);
+			curVal = table[i][column];
+			if (!curIdx[curVal]) {
+					curIdx[curVal] = [i];
+			} else {
+					curIdx[curVal].push(i)
+			}
+		}
+		// { name : {  George: [1,2,3],
+		// 						 Bill: [4,5,6] },
+		// 	last_name: { Horton: [1] }
+	  //
   };
-
   this.getIndicesOf = function(column, value) {
     if (!indicies[column]) {
       return undefined;
     }
-    var idx = [];
-    var table = indicies[column].exec();
-    for (row in table) {
-      if (table[row][column] === value) {
-        idx.push(table[row].id)
-      }
-    }
-    return idx;
+		return indicies[column][value];
   };
 
 }
